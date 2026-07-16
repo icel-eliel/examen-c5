@@ -1,25 +1,25 @@
 # CTI Frontend
 
-Dashboard Angular para mostrar llamadas, agentes y extensiones en tiempo real.
+Dashboard Angular para consultar el backend CTI y mostrar llamadas, agentes y extensiones en tiempo real.
 
 ## Requisitos
 
-- Node.js instalado.
-- Backend ejecutandose en `http://localhost:8080`.
+- Node.js.
+- Backend corriendo en `http://localhost:8080`.
 
-## Ejecutar
+## Ejecutar localmente
 
 ```bash
 npm start
 ```
 
-La aplicacion abre en:
+La aplicacion queda disponible en:
 
 ```text
 http://localhost:4200
 ```
 
-El proyecto usa `proxy.conf.json` para enviar las llamadas `/api` al backend local y evitar problemas de CORS durante desarrollo.
+Durante desarrollo, `proxy.conf.json` redirige `/api` al backend local para evitar configurar CORS a mano.
 
 ## Docker
 
@@ -28,13 +28,9 @@ docker build -t cti-frontend .
 docker run --rm -p 4200:8080 -e BACKEND_URL=http://localhost:8080 cti-frontend
 ```
 
-En Railway, configurar:
+En Docker, Angular se sirve como contenido estatico usando Nginx. La variable `BACKEND_URL` define a que backend se conecta el dashboard.
 
-```text
-BACKEND_URL=https://URL_PUBLICA_DEL_BACKEND
-```
-
-## Estructura
+## Estructura principal
 
 - `src/app/types`: contratos TypeScript del backend.
 - `src/app/services/cti-api.service.ts`: carga inicial por REST.

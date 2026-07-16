@@ -1,28 +1,30 @@
 # Examen C5 - CTI AVAYA Fullstack
 
-Solucion fullstack para consumir eventos CTI simulados por WebSocket, mantener el estado de llamadas en memoria y mostrarlo en un dashboard Angular en tiempo real.
+Solucion fullstack para una prueba tecnica de integracion CTI. El backend se conecta a un mock tipo AVAYA por WebSocket, procesa eventos de llamadas en tiempo real y expone el estado actual para que el frontend lo muestre en un dashboard.
+
+La idea fue mantener el proyecto simple y directo: sin base de datos, sin autenticacion y sin infraestructura extra que no fuera necesaria para resolver el ejercicio.
 
 ## Estructura
 
 ```text
-backend/   Spring Boot + Gradle
-frontend/  Angular standalone
+backend/   API Spring Boot con Gradle
+frontend/  Dashboard Angular standalone
 ```
 
-## Requisitos locales
+## Requisitos
 
-- Java 17 o superior. Probado con Java 21.
+- Java 17 o superior. Fue probado con Java 21.
 - Node.js.
-- No es necesario instalar Gradle globalmente; el backend usa Gradle Wrapper.
+- No hace falta instalar Gradle globalmente; el backend incluye Gradle Wrapper.
 
-## Ejecutar backend
+## Levantar el backend
 
 ```bash
 cd backend
 .\gradlew.bat bootRun
 ```
 
-Backend local:
+Por defecto queda disponible en:
 
 ```text
 http://localhost:8080
@@ -34,79 +36,35 @@ Endpoints principales:
 - `GET /calls/active`
 - `GET /agents`
 - `GET /extensions`
+- `GET /cti/connection`
 - `GET /stream/cti`
 
-La URL del WebSocket CTI se puede cambiar con:
+La URL del mock CTI se puede cambiar con:
 
 ```bash
 set CTI_WS_URL=wss://host-del-evaluador/
 ```
 
-## Ejecutar frontend
+## Levantar el frontend
 
 ```bash
 cd frontend
 npm start
 ```
 
-Frontend local:
+La aplicacion queda disponible en:
 
 ```text
 http://localhost:4200
 ```
 
-En desarrollo, Angular usa `proxy.conf.json` para redirigir `/api` hacia `http://localhost:8080`.
+En desarrollo, Angular usa `proxy.conf.json` para mandar las llamadas `/api` al backend local.
 
-## Despliegue en Railway
+## Notas tecnicas
 
-Usar un solo repositorio con dos servicios.
-
-### Servicio backend
-
-Crear un servicio desde este repo con:
-
-```text
-Root Directory: /backend
-```
-
-Variables recomendadas:
-
-```text
-CTI_WS_URL=wss://precook-overtone-syndrome.ngrok-free.dev/
-CTI_ALLOWED_ORIGINS=https://URL_PUBLICA_DEL_FRONTEND
-```
-
-Railway inyecta `PORT`; el backend lo lee desde `application.yml`.
-
-### Servicio frontend
-
-Crear otro servicio desde el mismo repo con:
-
-```text
-Root Directory: /frontend
-```
-
-Variables recomendadas:
-
-```text
-BACKEND_URL=https://URL_PUBLICA_DEL_BACKEND
-```
-
-El contenedor del frontend genera `env.js` al iniciar para apuntar al backend desplegado.
-
-### Orden sugerido
-
-1. Desplegar backend.
-2. Generar dominio publico del backend.
-3. Desplegar frontend con `BACKEND_URL`.
-4. Generar dominio publico del frontend.
-5. Volver al backend y configurar `CTI_ALLOWED_ORIGINS` con la URL publica del frontend.
-6. Redeploy del backend.
-
-## Decisiones tecnicas
-
-- Estado en memoria para respetar el alcance de la prueba.
-- `ConcurrentHashMap` en backend para manejar eventos concurrentes.
-- REST para carga inicial del dashboard.
-- Server-Sent Events para actualizacion en vivo hacia Angular.
-- Sin base de datos, autenticacion, Kafka ni Kubernetes.
+- El backend corre como una aplicacion Spring Boot con Tomcat embebido.
+- El frontend se compila como archivos estaticos de Angular; en Docker se sirve con Nginx.
+- El estado se mantiene en memoria usando estructuras concurrentes.
+- La carga inicial del dashboard se hace por REST.
+- Las actualizaciones en vivo se reciben por Server-Sent Events.
+- Los eventos duplicados se filtran por tipo, llamada y timestamp.

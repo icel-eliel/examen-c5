@@ -1,13 +1,13 @@
 # CTI Backend
 
-Backend Spring Boot para consumir eventos CTI simulados por WebSocket y exponer el estado actual por REST/SSE.
+Backend Spring Boot para conectarse al mock CTI por WebSocket, procesar eventos de llamadas y exponer el estado actual por REST y SSE.
 
 ## Requisitos
 
 - Java 17 o superior. Probado con Java 21.
-- No necesitas instalar Gradle: el proyecto incluye Gradle Wrapper.
+- No es necesario instalar Gradle; el proyecto incluye Gradle Wrapper.
 
-## Ejecutar
+## Ejecutar localmente
 
 ```bash
 .\gradlew.bat bootRun
@@ -19,7 +19,7 @@ Por defecto se conecta a:
 wss://precook-overtone-syndrome.ngrok-free.dev/
 ```
 
-Puedes cambiar la URL con una variable de entorno:
+Para usar otra URL:
 
 ```bash
 set CTI_WS_URL=wss://host-del-evaluador/
@@ -33,7 +33,7 @@ set CTI_WS_URL=wss://host-del-evaluador/
 - `GET /agents`
 - `GET /extensions`
 - `GET /cti/connection`
-- `GET /stream/cti` para actualizaciones SSE del dashboard
+- `GET /stream/cti`
 
 ## Docker
 
@@ -50,9 +50,10 @@ CTI_WS_URL=wss://precook-overtone-syndrome.ngrok-free.dev/
 CTI_ALLOWED_ORIGINS=http://localhost:4200
 ```
 
-## Notas de diseño
+## Notas
 
-- El estado se mantiene en memoria con estructuras concurrentes.
-- Los eventos duplicados se ignoran por tipo, llamada y timestamp.
-- Si el WebSocket se desconecta, el cliente intenta reconectar con backoff simple.
-- No usa base de datos ni autenticación, siguiendo el alcance de la prueba.
+- Corre como JAR de Spring Boot sobre Tomcat embebido.
+- Mantiene el estado en memoria, sin base de datos.
+- Usa estructuras concurrentes para soportar eventos simultaneos.
+- Intenta reconectar automaticamente si el WebSocket se desconecta.
+- Ignora eventos duplicados usando tipo de evento, llamada y timestamp.
