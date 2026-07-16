@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: cti-backend
+
+server:
+  port: 8080
+
+cti:
+  enabled: true
+  url: ${CTI_WS_URL:wss://precook-overtone-syndrome.ngrok-free.dev/}
+  reconnect-initial-delay: 2s
+  reconnect-max-delay: 20s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.examenc5.cti: INFO
