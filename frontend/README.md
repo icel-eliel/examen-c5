@@ -21,6 +21,19 @@ http://localhost:4200
 
 El proyecto usa `proxy.conf.json` para enviar las llamadas `/api` al backend local y evitar problemas de CORS durante desarrollo.
 
+## Docker
+
+```bash
+docker build -t cti-frontend .
+docker run --rm -p 4200:8080 -e BACKEND_URL=http://localhost:8080 cti-frontend
+```
+
+En Railway, configurar:
+
+```text
+BACKEND_URL=https://URL_PUBLICA_DEL_BACKEND
+```
+
 ## Estructura
 
 - `src/app/types`: contratos TypeScript del backend.

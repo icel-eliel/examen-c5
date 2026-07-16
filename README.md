@@ -57,6 +57,52 @@ http://localhost:4200
 
 En desarrollo, Angular usa `proxy.conf.json` para redirigir `/api` hacia `http://localhost:8080`.
 
+## Despliegue en Railway
+
+Usar un solo repositorio con dos servicios.
+
+### Servicio backend
+
+Crear un servicio desde este repo con:
+
+```text
+Root Directory: /backend
+```
+
+Variables recomendadas:
+
+```text
+CTI_WS_URL=wss://precook-overtone-syndrome.ngrok-free.dev/
+CTI_ALLOWED_ORIGINS=https://URL_PUBLICA_DEL_FRONTEND
+```
+
+Railway inyecta `PORT`; el backend lo lee desde `application.yml`.
+
+### Servicio frontend
+
+Crear otro servicio desde el mismo repo con:
+
+```text
+Root Directory: /frontend
+```
+
+Variables recomendadas:
+
+```text
+BACKEND_URL=https://URL_PUBLICA_DEL_BACKEND
+```
+
+El contenedor del frontend genera `env.js` al iniciar para apuntar al backend desplegado.
+
+### Orden sugerido
+
+1. Desplegar backend.
+2. Generar dominio publico del backend.
+3. Desplegar frontend con `BACKEND_URL`.
+4. Generar dominio publico del frontend.
+5. Volver al backend y configurar `CTI_ALLOWED_ORIGINS` con la URL publica del frontend.
+6. Redeploy del backend.
+
 ## Decisiones tecnicas
 
 - Estado en memoria para respetar el alcance de la prueba.

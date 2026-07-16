@@ -3,13 +3,14 @@ spring:
     name: cti-backend
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 cti:
   enabled: true
   url: ${CTI_WS_URL:wss://precook-overtone-syndrome.ngrok-free.dev/}
   reconnect-initial-delay: 2s
   reconnect-max-delay: 20s
+  allowed-origins: ${CTI_ALLOWED_ORIGINS:http://localhost:4200}
 
 management:
   endpoints:

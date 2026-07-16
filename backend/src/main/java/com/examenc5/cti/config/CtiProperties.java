@@ -9,5 +9,6 @@ public record CtiProperties(
 		String url,
 		boolean enabled,
 		Duration reconnectInitialDelay,
-		Duration reconnectMaxDelay) {
+		Duration reconnectMaxDelay,
+		String allowedOrigins) {
 }

@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { DashboardSnapshot } from '../types/cti.models';
+import { apiBaseUrl } from '../config/runtime-config';
 
 @Injectable({ providedIn: 'root' })
 export class CtiStreamService {
+  private readonly baseUrl = apiBaseUrl();
+
   connect(): Observable<DashboardSnapshot> {
     return new Observable((subscriber) => {
-      const source = new EventSource('/api/stream/cti');
+      const source = new EventSource(`${this.baseUrl}/stream/cti`);
 
       source.addEventListener('cti-snapshot', (event) => {
         try {

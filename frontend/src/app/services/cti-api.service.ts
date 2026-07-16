@@ -9,10 +9,11 @@ import {
   DashboardSnapshot,
   ExtensionSnapshot,
 } from '../types/cti.models';
+import { apiBaseUrl } from '../config/runtime-config';
 
 @Injectable({ providedIn: 'root' })
 export class CtiApiService {
-  private readonly baseUrl = '/api';
+  private readonly baseUrl = apiBaseUrl();
 
   constructor(private readonly http: HttpClient) {}
 

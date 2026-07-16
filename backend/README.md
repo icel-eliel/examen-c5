@@ -35,6 +35,21 @@ set CTI_WS_URL=wss://host-del-evaluador/
 - `GET /cti/connection`
 - `GET /stream/cti` para actualizaciones SSE del dashboard
 
+## Docker
+
+```bash
+docker build -t cti-backend .
+docker run --rm -p 8080:8080 cti-backend
+```
+
+Variables utiles:
+
+```text
+PORT=8080
+CTI_WS_URL=wss://precook-overtone-syndrome.ngrok-free.dev/
+CTI_ALLOWED_ORIGINS=http://localhost:4200
+```
+
 ## Notas de diseño
 
 - El estado se mantiene en memoria con estructuras concurrentes.
